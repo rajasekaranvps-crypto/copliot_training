@@ -1,4 +1,4 @@
-# 🧪 GitHub Copilot Training — Lab Tasks
+git# 🧪 GitHub Copilot Training — Lab Tasks
 ### Conduit · FastAPI RealWorld · 10-Day Programme
 
 > **Before you start each day**

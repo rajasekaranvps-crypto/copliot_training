@@ -1,0 +1,50 @@
+groups:
+  - name: conduit-alerts
+    rules:
+      - alert: ConduitHighErrorRate
+        expr: |
+          sum(rate(http_requests_total{status=~"5.."}[5m]))
+          / sum(rate(http_requests_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Conduit is serving too many 5xx responses"
+          description: "More than 5% of HTTP requests are returning 5xx errors for over 5 minutes."
+          runbook_url: "https://example.com/runbooks/conduit-high-error-rate"
+
+      - alert: ConduitHighLatency
+        expr: |
+          histogram_quantile(
+            0.99,
+            sum(rate(http_request_duration_seconds_bucket[10m])) by (le)
+          ) > 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Conduit p99 latency is above 500ms"
+          description: "The 99th percentile request latency has exceeded 500ms for at least 10 minutes."
+          runbook_url: "https://example.com/runbooks/conduit-high-latency"
+
+      - alert: ConduitDBConnectionsExhausted
+        expr: |
+          pg_database_connections_in_use
+          / pg_database_connections_max > 0.8
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Conduit database connection pool is over 80% used"
+          description: "Database connections are near exhaustion, which may lead to failures or latency spikes."
+          runbook_url: "https://example.com/runbooks/conduit-db-connections-exhausted"
+
+      - alert: ConduitPodRestarting
+        expr: sum(increase(kube_pod_container_status_restarts_total[15m])) by (pod) > 3
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Conduit pod container is restarting frequently"
+          description: "More than 3 container restarts have occurred within 15 minutes."
+          runbook_url: "https://example.com/runbooks/conduit-pod-restarting"
