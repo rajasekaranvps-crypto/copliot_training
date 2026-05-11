@@ -31,6 +31,7 @@ conduit-copilot-training/
 
 ---
 
+
 ## Day 1 — Copilot Orientation
 
 **Goal:** Make your first successful Copilot suggestion in the Conduit codebase and understand how context shapes suggestion quality.
